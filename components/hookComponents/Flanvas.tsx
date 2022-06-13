@@ -1,5 +1,5 @@
-import React, {  useRef, useState } from "react";
-import SignatureScreen, {SignatureViewRef,} from "react-native-signature-canvas";
+import React, { useRef, useState } from "react";
+import SignatureScreen, { SignatureViewRef, } from "react-native-signature-canvas";
 import Navbar from "./Navbar";
 import CustomModal from "./CustomModal";
 
@@ -25,7 +25,7 @@ width: 100%; height: 100%;}`;
 
 
 const Flanvas: React.FC<Props> = ({ onOK }) => {
-    
+
     const ref = useRef<SignatureViewRef>(null);
     const [state, setState] = useState<State>(initState)
 
@@ -34,17 +34,17 @@ const Flanvas: React.FC<Props> = ({ onOK }) => {
     const handleSignature = (signature: string) => {
         // onOK(signature);
     };
-    
+
     const handleEmpty = () => {
         console.log("Empty");
     };
-    
+
     const handleUndo = () => {
         ref.current?.undo()
     };
-    
-    const handleRedo =  () => {
-        ref.current?.redo()         
+
+    const handleRedo = () => {
+        ref.current?.redo()
     };
 
     const handleEnd = () => {
@@ -52,7 +52,7 @@ const Flanvas: React.FC<Props> = ({ onOK }) => {
     };
 
     const handleClear = () => {
-        ref.current?.clearSignature();  
+        ref.current?.clearSignature();
     };
 
     const handlePenEraser = () => {
@@ -81,7 +81,7 @@ const Flanvas: React.FC<Props> = ({ onOK }) => {
                 onEnd={handleEnd}
                 onOK={handleSignature}
                 onEmpty={handleEmpty}
-                onClear={handleClear}
+                //onClear={handleClear}
                 autoClear={false}
                 webStyle={style}
             //descriptionText={text}

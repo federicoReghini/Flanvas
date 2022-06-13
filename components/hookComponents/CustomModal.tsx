@@ -23,7 +23,7 @@ const CustomModal: FunctionComponent<Props> = ({ modalIsVisible, callback, refCa
                 Alert.alert('Modal has been closed.');
             }}>
             <Text>Menu</Text>
-            <Menu refCanvas={refCanvas} />
+            <Menu refCanvas={refCanvas} callback={callback} />
             <Pressable onPress={callback}>
                 <Text style={{ marginTop: 100 }}>Close Menu</Text>
             </Pressable>
