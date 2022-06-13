@@ -1,6 +1,6 @@
 // native components
 import { StatusBar } from 'expo-status-bar';
-import { View } from 'react-native';
+import { SafeAreaView} from 'react-native';
 
 // styles
 import { styles } from './styles_generic';
@@ -10,9 +10,9 @@ import EntryApp from './EntryApp';
 
 export default function App() {
   return (
-    <View style={styles.container}>
+    <SafeAreaView style={styles.container}>
       <StatusBar style="auto" />
       <EntryApp />
-    </View>
+    </SafeAreaView>
   );
 }
