@@ -58,7 +58,7 @@ const Tutorial: FunctionComponent<Props> = ({ navigation }): ReactElement => {
                     onScroll={setSliderPage}
                 >
                     <View style={{ width, height }}>
-                        <Image source={require('../assets/sos2.jpg')} style={styles.imageStyle} />
+                        {/* <Image source={require('../assets/sos2.jpg')} style={styles.imageStyle} /> */}
                         <View style={styles.wrapper}>
 
                             <Text style={styles.header}>
@@ -72,10 +72,10 @@ const Tutorial: FunctionComponent<Props> = ({ navigation }): ReactElement => {
                     </View>
 
                     <View style={{ width, height }}>
-                        <Image
+                        {/* <Image
                             source={require('../assets/sos3.jpg')}
                             style={styles.imageStyle}
-                        />
+                        /> */}
                         <View style={styles.wrapper}>
 
                             <Text style={styles.header}>
@@ -89,10 +89,10 @@ const Tutorial: FunctionComponent<Props> = ({ navigation }): ReactElement => {
                     </View>
 
                     <View style={{ width, height }}>
-                        <Image
+                        {/* <Image
                             source={require('../assets/senseiold.png')}
                             style={styles.imageStyle}
-                        />
+                        /> */}
                         <View style={styles.wrapper}>
 
                             <Text style={styles.header}>
