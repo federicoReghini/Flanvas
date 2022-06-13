@@ -1,21 +1,24 @@
 import React, { FunctionComponent } from 'react';
 import { View, Text, Pressable } from 'react-native';
+import { styles } from '../../styles_generic';
 
 interface Props {
     callbackUndo: () => void,
     callbackRedo: () => void,
     callbackPenEraser: () => void,
-    callbackMenu: () => void
+    callbackMenu: () => void,
+    callbackCamera: () => void
 }
 
-const Navbar: FunctionComponent<Props> = ({ callbackUndo, callbackRedo, callbackPenEraser, callbackMenu }) => {
+const Navbar: FunctionComponent<Props> = ({ callbackUndo, callbackRedo, callbackPenEraser, callbackMenu, callbackCamera }) => {
 
 
 
 
     return (
 
-        <View>
+        <View
+        style={styles.containerFlexRow}>
             <Pressable onPress={callbackUndo}>
                 <Text>Undo</Text>
             </Pressable>
@@ -26,6 +29,10 @@ const Navbar: FunctionComponent<Props> = ({ callbackUndo, callbackRedo, callback
 
             <Pressable onPress={callbackPenEraser}>
                 <Text>Pen/Eraser</Text>
+            </Pressable>
+
+            <Pressable onPress={callbackCamera}>
+                <Text>Camera</Text>
             </Pressable>
 
             <Pressable onPress={callbackMenu}>

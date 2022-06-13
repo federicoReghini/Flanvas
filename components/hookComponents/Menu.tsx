@@ -1,4 +1,4 @@
-import React, { FunctionComponent, useState, useEffect, ReactElement } from 'react';
+import React, { FunctionComponent, useState, ReactElement } from 'react';
 
 // native components
 import { View, Text, Pressable } from 'react-native';
@@ -9,11 +9,8 @@ import { menu_styles } from '../../assets/styles/menu_styles';
 
 // type
 import { signatureRef } from '../../utils/ts/types';
-
-
 interface Props {
     refCanvas: signatureRef,
-    callback: () => void
 }
 
 interface State {
@@ -30,14 +27,11 @@ const palette = ['#000000', '#FF4848', '#387CFF', '#3CFF72', '#D560FE', '#FF8A00
 
 
 
-const Menu: FunctionComponent<Props> = ({ refCanvas, callback }) => {
+const Menu: FunctionComponent<Props> = ({ refCanvas }) => {
 
     const [state, setState] = useState<State>(initState)
 
     let isModal: boolean = false;
-
-    /*     useEffect( //callback, [isModal]) */
-
 
     const handleCallback = (ref: any, params: any) => () => {
 
@@ -45,7 +39,7 @@ const Menu: FunctionComponent<Props> = ({ refCanvas, callback }) => {
 
         switch (ref) {
 
-            case refCanvas?.changePenColor: return refCanvas?.changePenColor(params)
+            case refCanvas?.changePenColor: return refCanvas?.changePenColor(params);
             case refCanvas?.changePenSize: return refCanvas?.changePenSize(params, params);
             case refCanvas?.clearSignature: return refCanvas?.clearSignature();
 
@@ -87,7 +81,7 @@ const Menu: FunctionComponent<Props> = ({ refCanvas, callback }) => {
                     state.isPalette &&
                     palette.map(map)
                 }
-                
+
             </View>
 
             <Pressable
