@@ -22,7 +22,7 @@ const EntryApp: FC = (): ReactElement => {
 
             <NavigationContainer>
                 <Stack.Navigator
-                    initialRouteName={'Tutorial'}
+                    initialRouteName={'Home'}
                 >
 
                     <Stack.Screen
@@ -47,20 +47,9 @@ const EntryApp: FC = (): ReactElement => {
                     <Stack.Screen
                         name='Home'
                         component={Home}
-                        options={
-                            {
-                                title: 'Home',
-                                headerStyle: {
-                                    backgroundColor: '#fff',
-                                },
-                                headerTintColor: '#44403C',
-                                headerTitleAlign: 'center',
-                                headerTitleStyle: {
-                                    fontWeight: 'bold',
-                                    fontSize: 24,
-                                }
-                            }
-                        }
+                        options={{
+                            headerShown: false
+                        }}
                     />
 
 
