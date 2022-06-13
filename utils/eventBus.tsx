@@ -1,23 +1,22 @@
-import type { ref } from "./ts/types";
-const events = require('events');
+import EventEmitter from 'events';
 
-const eventCustom = new events();
+const eventCustom = new EventEmitter();
 
-interface Props {
-    onListening: (event: string, callback: (e: ref) => void) => any ,
-    emit: (event: string, data: ref) => void
+type on = (event: string, callback: (e: any) => void) => void;
 
+type emit = (event: string, data: any) => void;
+
+
+export const __on: on = (event, callback) => {
+    eventCustom.addListener(event, function(e: any){
+        callback(e)
+    })
 }
 
-export const eventBus: Props = {
-    onListening(event, callback) {
-       //function for get the data
-    //    event.stopImmediatePropagate()
-            return eventCustom.on(event,  callback)
+export const __emit: emit = (event, data) => {
+    eventCustom.emit(event, data)
+}
 
-
-    },
-    emit(event, data) {  // method for make a dispatch. Takes two parameters. thr 1st in the key for the event and the 2nd the data we want to send
-        eventCustom.emit(event, data)
-    },
+export const __remove = () => {
+    eventCustom.removeAllListeners();
 }

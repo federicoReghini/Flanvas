@@ -49,31 +49,13 @@ const EntryApp: FC = (): ReactElement => {
         })()
     }
 
-    useEffect(() => {
-
-        const newState = Object.assign({}, state);
-
-        (async (): Promise<void> => {
-
-            const [CAMERA, MEDIA] = await Promise.all([
-                Camera.getCameraPermissionsAsync(),
-                MediaLibrary.requestPermissionsAsync()
-            ]);
-
-            if ((CAMERA.status && MEDIA.status) === "granted") {
-                newState.isPermission = true;
-            }
-
-            setState(newState);
-        })()
-    }, []);
+    useEffect(handleUseEffect, []);
 
     return (
         <>
-
             <NavigationContainer>
                 <Stack.Navigator
-                    initialRouteName={'Tutorial'}
+                    initialRouteName={'Home'}
                 >
 
                     <Stack.Screen

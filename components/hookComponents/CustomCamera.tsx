@@ -1,8 +1,7 @@
-import React, { FunctionComponent, useState, useEffect, /* usePermissions */ } from 'react'
-import { StatusBar } from 'expo-status-bar';
+import React, { FunctionComponent, useState } from 'react';
 
 //React Navite
-import { Text, View, TouchableOpacity, Image } from 'react-native';
+import { Text, View, TouchableOpacity } from 'react-native';
 
 //Camera
 import { Camera, CameraCapturedPicture, CameraType } from 'expo-camera';
@@ -13,23 +12,22 @@ import * as MediaLibrary from 'expo-media-library'
 //ImagePicker -> Native camera and gallery
 import * as ImagePicker from 'expo-image-picker'
 
-//AsyncStorage
-import AsyncStorage from '@react-native-async-storage/async-storage'
-
 //Style
 import styleApp from '../../styleApp';
-import Flanvas from './Flanvas';
 
 interface State {
     hasPermission: boolean,
     hasPermissionImagePicker: boolean,
     hasPermissionMediaLibrary: boolean,
-    typeCamera: string,
+    typeCamera: number | CameraType,
     zoom: number,
     image?: string,
     openCamera: boolean
 }
 
+type props = {
+    callback: (e: string | undefined) => void
+}
 
 const initialState: State = {
     hasPermission: false,
@@ -38,26 +36,22 @@ const initialState: State = {
     typeCamera: CameraType.back,
     zoom: 0,
     openCamera: false,
-    image: "file:///var/mobile/Containers/Data/Application/10659537-622F-4FE4-BECF-27292BD12214/Library/Caches/ExponentExperienceData/%2540ggdev1995%252FFlanvas/ImagePicker/59D92568-2E75-4DCC-969B-569AA06671DC.jpg"
+    image: undefined
 }
-
 
 let camera: Camera | null
 
-const App: FunctionComponent = () => {
+const CustomCamera: FunctionComponent<props> = ({ callback }) => {
 
     const [state, setState] = useState<State>(initialState)
 
-    const [status, requestPermission] = MediaLibrary.usePermissions();
+    // useEffect(() => {
+    //     (async () => {
 
-    useEffect(() => {
-        /*        (async () => {
-                   await requestPermission()
-               })() */
-    }, [])
+    //     })()
+    // }, [])
 
-
-    const handleOpenGallery = async () => {
+    const handleOpenGallery_ = async () => {
         let result = await ImagePicker.launchImageLibraryAsync({
             mediaTypes: ImagePicker.MediaTypeOptions.All,
             allowsEditing: true,
@@ -70,7 +64,7 @@ const App: FunctionComponent = () => {
         if (!result.cancelled) {
             setState({
                 ...state,
-                image: result
+                image: result.uri
             });
         }
     }
@@ -101,7 +95,7 @@ const App: FunctionComponent = () => {
 
                     <TouchableOpacity
                         style={styleApp.touchableOpacity}
-                        onPress={handleOpenGallery}>
+                        onPress={handleOpenGallery_}>
                         <Text style={styleApp.flipButton}> Gallery </Text>
                     </TouchableOpacity>
 
@@ -112,24 +106,18 @@ const App: FunctionComponent = () => {
                     onPress={async (): Promise<void> => {
                         let option: object = {
                             quality: 0.5,
-                            base64: false
+                            base64: true
                         }
-                        const { status } = await MediaLibrary.getPermissionsAsync()
 
-                        const photo: CameraCapturedPicture = await camera.takePictureAsync(option)
-                        console.log(status);
-                        //console.log(photo)
+                        const photo: CameraCapturedPicture | undefined = await camera?.takePictureAsync(option)
 
-                        //Save into gallery
-                        //await MediaLibrary.saveToLibraryAsync(photo.base64)
+                        // __emit('image', photo.base64)
 
-                        const assets = await MediaLibrary.createAssetAsync(photo.uri)
-
-
+                        callback(photo?.base64)
 
                         setState({
                             ...state,
-                            image: photo
+                            image: photo?.base64
                         })
 
                     }}>
@@ -138,10 +126,9 @@ const App: FunctionComponent = () => {
 
             </Camera>
 
-            {/*  <Flanvas text={state.image} /> */}
 
         </View>
     );
 }
 
-export default App
+export default CustomCamera;
