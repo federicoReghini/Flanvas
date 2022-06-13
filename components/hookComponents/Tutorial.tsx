@@ -5,7 +5,7 @@ import { Dimensions, Image, SafeAreaView, ScrollView, Text, TouchableOpacity, Vi
 import type { NativeStackScreenProps } from '@react-navigation/native-stack';
 
 // styles
-import { styles } from '../../../assets/styles/tutorial_style';
+import { styles } from '../../assets/styles/tutorial_style';
 const { width, height } = Dimensions.get('window');
 
 // interface & type
