@@ -1,25 +1,29 @@
-import React, { Children, useState } from 'react';
-import { Alert, Modal, StyleSheet, Text, Pressable, View } from 'react-native';
+import React, { FunctionComponent } from 'react';
+import { Alert, Modal, StyleSheet, Text, Pressable } from 'react-native';
+import { signatureRef } from '../../utils/ts/types';
 
 //Components
 import Menu from './Menu';
 
-const CustomModal = ({ modalIsVisible, callback }) => {
+interface Props {
+    modalIsVisible: boolean,
+    callback: () => void,
+    refCanvas: signatureRef
+}
 
+const CustomModal: FunctionComponent<Props> = ({ modalIsVisible, callback, refCanvas }) => {
 
     return (
 
         <Modal
             animationType="slide"
-            transparent={true}
+            transparent={false}
             visible={modalIsVisible}
             onRequestClose={() => {
                 Alert.alert('Modal has been closed.');
             }}>
             <Text>Menu</Text>
-            {/*     {
-                Children
-            } */}
+            <Menu refCanvas={refCanvas} />
             <Pressable onPress={callback}>
                 <Text style={{ marginTop: 100 }}>Close Menu</Text>
             </Pressable>

@@ -4,4 +4,12 @@ export const styles = StyleSheet.create({
   container: {
     flex: 1,
   },
+  btn:{
+    backgroundColor: '#1C99B4',
+    padding: 10,
+    margin: 3,
+    textAlign: 'center',
+    color: '#FFF9F5',
+     borderRadius: 20
+  }
 })

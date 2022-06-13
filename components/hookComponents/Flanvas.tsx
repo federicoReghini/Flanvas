@@ -1,9 +1,5 @@
-import React, { useRef, useState } from "react";
-import { Button, Text, View } from "react-native";
-import SignatureScreen, {
-    SignatureViewRef,
-} from "react-native-signature-canvas";
-import Swipeable from 'react-native-gesture-handler/Swipeable';
+import React, {  useRef, useState } from "react";
+import SignatureScreen, {SignatureViewRef,} from "react-native-signature-canvas";
 import Navbar from "./Navbar";
 import CustomModal from "./CustomModal";
 
@@ -20,34 +16,35 @@ const initState = {
     isModal: false
 }
 
-const Flanvas: React.FC<Props> = ({ onOK }) => {
-    const ref = useRef<SignatureViewRef>(null);
+const style = `.m-signature-pad {box-shadow: none; border: 1px,solid; } 
+.m-signature-pad--body {border: none;}
+.m-signature-pad--footer {display: none; margin: 0px;}
+body,html {
+width: 100%; height: 100%;}`;
 
+
+
+const Flanvas: React.FC<Props> = ({ onOK }) => {
+    
+    const ref = useRef<SignatureViewRef>(null);
     const [state, setState] = useState<State>(initState)
 
-    let isEraser: boolean = false
+    let isEraser: boolean = false;
 
-    const style = `.m-signature-pad {box-shadow: none; border: 1px,solid; } 
-  .m-signature-pad--body {border: none;}
-  .m-signature-pad--footer {display: none; margin: 0px;}
-  body,html {
-  width: 100%; height: 100%;}`;
-
-
-    const handleSignature = (signature) => {
-        //onOK(signature);
+    const handleSignature = (signature: string) => {
+        // onOK(signature);
     };
-
+    
     const handleEmpty = () => {
         console.log("Empty");
     };
-
+    
     const handleUndo = () => {
         ref.current?.undo()
     };
-
-    const handleRedo = () => {
-        ref.current?.redo()
+    
+    const handleRedo =  () => {
+        ref.current?.redo()         
     };
 
     const handleEnd = () => {
@@ -55,7 +52,7 @@ const Flanvas: React.FC<Props> = ({ onOK }) => {
     };
 
     const handleClear = () => {
-        ref.current?.clearSignature();
+        ref.current?.clearSignature();  
     };
 
     const handlePenEraser = () => {
@@ -97,7 +94,7 @@ const Flanvas: React.FC<Props> = ({ onOK }) => {
                 callbackMenu={handleMenu}
             />
 
-            <CustomModal modalIsVisible={state.isModal} callback={handleMenu}/>
+            <CustomModal modalIsVisible={state.isModal} callback={handleMenu} refCanvas={ref.current} />
 
         </>
     );

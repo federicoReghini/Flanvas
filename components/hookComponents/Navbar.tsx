@@ -1,7 +1,14 @@
-import React, { FunctionComponent } from 'react'
-import { View, Text, Pressable } from 'react-native'
+import React, { FunctionComponent } from 'react';
+import { View, Text, Pressable } from 'react-native';
 
-const Navbar: FunctionComponent = ({ callbackUndo, callbackRedo, callbackPenEraser, callbackMenu }) => {
+interface Props {
+    callbackUndo: () => void,
+    callbackRedo: () => void,
+    callbackPenEraser: () => void,
+    callbackMenu: () => void
+}
+
+const Navbar: FunctionComponent<Props> = ({ callbackUndo, callbackRedo, callbackPenEraser, callbackMenu }) => {
 
 
 
