@@ -4,7 +4,7 @@ import Navbar from "./Navbar";
 import CustomModal from "./CustomModal";
 
 interface Props {
-    text: string;
+    // text: string;
     onOK?: Function
 }
 
@@ -24,7 +24,7 @@ width: 100%; height: 100%;}`;
 
 
 
-const Flanvas: React.FC<Props> = ({ onOK }) => {
+const Flanvas: React.FC<Props> = ({ text, onOK }) => {
 
     const ref = useRef<SignatureViewRef>(null);
     const [state, setState] = useState<State>(initState)
@@ -32,6 +32,8 @@ const Flanvas: React.FC<Props> = ({ onOK }) => {
     let isEraser: boolean = false;
 
     const handleSignature = (signature: string) => {
+        console.log(signature);
+
         // onOK(signature);
     };
 
@@ -67,6 +69,20 @@ const Flanvas: React.FC<Props> = ({ onOK }) => {
         }
     }
 
+    const getBase64FromUrl = async (url) => {
+        const data = await fetch(url);
+        const blob = await data.blob();
+        return new Promise((resolve) => {
+            const reader = new FileReader();
+            reader.readAsDataURL(blob);
+            reader.onloadend = () => {
+                const base64data = reader.result;
+                resolve(base64data);
+            }
+        });
+    }
+
+
     const handleMenu = () => {
         setState({
             ...state,
@@ -84,6 +100,9 @@ const Flanvas: React.FC<Props> = ({ onOK }) => {
                 //onClear={handleClear}
                 autoClear={false}
                 webStyle={style}
+                bgSrc={getBase64FromUrl(text)}
+                bgWidth={300}
+                bgHeight={300}
             //descriptionText={text}
             />
 

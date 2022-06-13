@@ -1,12 +1,18 @@
 import React from 'react';
 
 // native components
-import { View, Text } from 'react-native';
+import { View, Text, Pressable } from 'react-native';
+import CustomCamera from '../components/hookComponents/CustomCamera';
 
-const Tutorial = () => {
+const Tutorial = (props) => {
   return (
-    <View>
+    <View style={{flex: 1}}>
+      <Pressable onPress={() => { }}>
+        <Text>Go to home</Text>
+      </Pressable>
       <Text>Tutorial</Text>
+      <CustomCamera />
+
     </View>
   )
 }

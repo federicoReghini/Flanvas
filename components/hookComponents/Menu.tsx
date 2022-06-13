@@ -9,6 +9,7 @@ import { menu_styles } from '../../assets/styles/menu_styles';
 
 // type
 import { signatureRef } from '../../utils/ts/types';
+import CustomCamera from './CustomCamera';
 
 
 interface Props {
@@ -87,7 +88,7 @@ const Menu: FunctionComponent<Props> = ({ refCanvas, callback }) => {
                     state.isPalette &&
                     palette.map(map)
                 }
-                
+
             </View>
 
             <Pressable
@@ -110,6 +111,8 @@ const Menu: FunctionComponent<Props> = ({ refCanvas, callback }) => {
             >
                 <Text style={styles.btn}>Camera</Text>
             </Pressable>
+
+            <CustomCamera />
 
             <Pressable
             >

@@ -30,7 +30,7 @@ const EntryApp: FC = (): ReactElement => {
 
     const [state, setState] = useState(initState);
 
-    const handleUseEffect = () : void => {
+    const handleUseEffect = (): void => {
 
         const newState = Object.assign({}, state);
 
@@ -41,7 +41,7 @@ const EntryApp: FC = (): ReactElement => {
                 MediaLibrary.requestPermissionsAsync()
             ]);
 
-            if ((CAMERA.status && MEDIA.status) === "granted"){
+            if ((CAMERA.status && MEDIA.status) === "granted") {
                 newState.isPermission = true;
             }
 
@@ -56,7 +56,7 @@ const EntryApp: FC = (): ReactElement => {
 
             <NavigationContainer>
                 <Stack.Navigator
-                    initialRouteName={'Home'}
+                    initialRouteName={'Tutorial'}
                 >
 
                     <Stack.Screen
