@@ -48,8 +48,12 @@ const App: FunctionComponent = () => {
 
     const [state, setState] = useState<State>(initialState)
 
-    useEffect(() => {
+    const [status, requestPermission] = MediaLibrary.usePermissions();
 
+    useEffect(() => {
+        /*        (async () => {
+                   await requestPermission()
+               })() */
     }, [])
 
 
@@ -74,7 +78,7 @@ const App: FunctionComponent = () => {
     return (
         <View style={{ flex: 1 }}>
 
-            {/* <Camera
+            <Camera
                 style={styleApp.camera}
                 type={state.typeCamera}
                 zoom={state.zoom}
@@ -103,7 +107,6 @@ const App: FunctionComponent = () => {
 
                 </View>
 
-
                 <TouchableOpacity
                     style={styleApp.touchableOpacity}
                     onPress={async (): Promise<void> => {
@@ -111,23 +114,31 @@ const App: FunctionComponent = () => {
                             quality: 0.5,
                             base64: false
                         }
+                        const { status } = await MediaLibrary.getPermissionsAsync()
+
                         const photo: CameraCapturedPicture = await camera.takePictureAsync(option)
-                        console.log(photo)
+                        console.log(status);
+                        //console.log(photo)
 
                         //Save into gallery
-                        MediaLibrary.saveToLibraryAsync(photo.uri)
-                        //const asset = await MediaLibrary.createAssetAsync(photo.uri)
+                        //await MediaLibrary.saveToLibraryAsync(photo.base64)
+
+                        const assets = await MediaLibrary.createAssetAsync(photo.uri)
+
+
+
                         setState({
                             ...state,
                             image: photo
                         })
+
                     }}>
                     <Text style={styleApp.flipButton}> Take Pic </Text>
                 </TouchableOpacity>
 
-            </Camera> */}
+            </Camera>
 
-            <Flanvas text={state.image} />
+            {/*  <Flanvas text={state.image} /> */}
 
         </View>
     );

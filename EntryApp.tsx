@@ -49,7 +49,24 @@ const EntryApp: FC = (): ReactElement => {
         })()
     }
 
-    useEffect(handleUseEffect, []);
+    useEffect(() => {
+
+        const newState = Object.assign({}, state);
+
+        (async (): Promise<void> => {
+
+            const [CAMERA, MEDIA] = await Promise.all([
+                Camera.getCameraPermissionsAsync(),
+                MediaLibrary.requestPermissionsAsync()
+            ]);
+
+            if ((CAMERA.status && MEDIA.status) === "granted") {
+                newState.isPermission = true;
+            }
+
+            setState(newState);
+        })()
+    }, []);
 
     return (
         <>
@@ -85,6 +102,7 @@ const EntryApp: FC = (): ReactElement => {
                             headerShown: false
                         }}
                     />
+
 
 
                 </Stack.Navigator>
