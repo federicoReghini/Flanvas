@@ -7,7 +7,7 @@ import { Text, View, TouchableOpacity } from 'react-native';
 import { Camera, CameraCapturedPicture, CameraType } from 'expo-camera';
 
 //MediaLibrary -> local gallery image, save and read files
-import * as MediaLibrary from 'expo-media-library'
+// import * as MediaLibrary from 'expo-media-library'
 
 //ImagePicker -> Native camera and gallery
 import * as ImagePicker from 'expo-image-picker'
@@ -106,18 +106,18 @@ const CustomCamera: FunctionComponent<props> = ({ callback }) => {
                     onPress={async (): Promise<void> => {
                         let option: object = {
                             quality: 0.5,
-                            base64: true
+                            base64: false
                         }
 
                         const photo: CameraCapturedPicture | undefined = await camera?.takePictureAsync(option)
 
                         // __emit('image', photo.base64)
 
-                        callback(photo?.base64)
+                        callback(photo?.uri)
 
                         setState({
                             ...state,
-                            image: photo?.base64
+                            image: photo?.uri
                         })
 
                     }}>

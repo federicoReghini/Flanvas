@@ -7,10 +7,11 @@ interface Props {
     callbackRedo: () => void,
     callbackPenEraser: () => void,
     callbackMenu: () => void,
-    callbackCamera: () => void
+    callbackCamera: () => void,
+    callbackConfirm: () => void
 }
 
-const Navbar: FunctionComponent<Props> = ({ callbackUndo, callbackRedo, callbackPenEraser, callbackMenu, callbackCamera }) => {
+const Navbar: FunctionComponent<Props> = ({ callbackUndo, callbackRedo, callbackPenEraser, callbackMenu, callbackCamera, callbackConfirm }) => {
 
 
 
@@ -33,6 +34,10 @@ const Navbar: FunctionComponent<Props> = ({ callbackUndo, callbackRedo, callback
 
             <Pressable onPress={callbackCamera}>
                 <Text>Camera</Text>
+            </Pressable>
+
+            <Pressable onPress={callbackConfirm}>
+                <Text>Confirm</Text>
             </Pressable>
 
             <Pressable onPress={callbackMenu}>
