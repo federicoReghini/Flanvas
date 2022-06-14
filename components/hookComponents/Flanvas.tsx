@@ -9,19 +9,13 @@ import * as MediaLibrary from 'expo-media-library'
 import Navbar from "./Navbar";
 import CustomModal from "./CustomModal";
 import CustomCamera from "./CustomCamera";
-
-
-// utils
-// import { __on, __remove } from "../../utils/eventBus";
-
 interface Props {
     // text: string;
     onOK?: Function
 }
-
 interface State {
     isModal: boolean,
-    image: string | undefined,
+    image: string,
     imageBackground: string | undefined
     isCamera: boolean
 }
@@ -47,20 +41,6 @@ const Flanvas: React.FC<Props> = () => {
 
     let isEraser: boolean = false;
 
-
-    // working on it
-    // useEffect(()=>{
-
-    //     __on('image', e => setState({
-    //         ...state,
-    //         image: e
-    //     }))
-
-    //     return () => {
-    //         __remove()
-    //     }
-    // }, [] )
-
     const __handleSignature = (signature: string) => {
 
         const path = FileSystem.cacheDirectory + "sign.png";
@@ -73,7 +53,6 @@ const Flanvas: React.FC<Props> = () => {
         )
             .then(() => FileSystem.getInfoAsync(path))
             .then(res => {
-                console.log('qui');
                 MediaLibrary.createAssetAsync(res?.uri)
 
                 setState({ ...state, image: res?.uri })
@@ -107,7 +86,7 @@ const Flanvas: React.FC<Props> = () => {
 
     const handleMenu_ = () => {
 
-        let img: string | undefined = ref.current?.readSignature()
+        let img: any = ref.current?.readSignature()
 
         setState({
             ...state,
@@ -136,10 +115,11 @@ const Flanvas: React.FC<Props> = () => {
         })
     }
 
-
     return (
         <>
+
             {!state.isCamera ?
+                
                 <SignatureScreen
                     ref={ref}
                     // onEnd={__handleEnd}
