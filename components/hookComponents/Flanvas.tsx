@@ -60,7 +60,8 @@ const Flanvas: React.FC<Props> = () => {
     // }, [] )
 
     const __handleSignature = (signature: string) => {  // da controllare l'immagine. ci salva una immagine nera ora. ma siamo vicini alla soluzione
-        const path = FileSystem.cacheDirectory + "sign.png";
+        const path = FileSystem.cacheDirectory + "sign.png"; //questo è da cambiare sicuro ed è probabilmente il nostro problema ora
+        
         FileSystem.writeAsStringAsync(
             path,
             signature.replace("data:image/png;base64,", ""),
@@ -95,9 +96,9 @@ const Flanvas: React.FC<Props> = () => {
             isEraser = true
         }
     }
-    const __handleEnd = () => {
-        ref.current?.readSignature()
-    }
+    // const __handleEnd = () => {
+    //     ref.current?.readSignature()
+    // }
 
     const handleMenu_ = () => {
         setState({
@@ -131,7 +132,7 @@ const Flanvas: React.FC<Props> = () => {
             {!state.isCamera ?
                 <SignatureScreen
                     ref={ref}
-                    onEnd={__handleEnd}
+                    // onEnd={__handleEnd}
                     onOK={__handleSignature}
                     // onEmpty={__handleEmpty}
                     //onClear={__handleRef(ref.current?.clearSignature)}
