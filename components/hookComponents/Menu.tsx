@@ -1,7 +1,10 @@
 import React, { FunctionComponent, useState, ReactElement } from 'react';
 
 // native components
-import { View, Text, Pressable } from 'react-native';
+import { View, Text, Pressable, Share } from 'react-native';
+
+//Ionicons
+import Ionicons from '@expo/vector-icons/Ionicons';
 
 // style
 import { styles } from '../../styles_generic';
@@ -11,14 +14,19 @@ import { menu_styles } from '../../assets/styles/menu_styles';
 import { signatureRef } from '../../utils/ts/types';
 interface Props {
     refCanvas: signatureRef,
+    imgTest: string
 }
 
 interface State {
     isPalette: boolean
+    isPenSize: boolean
+    colorIcon: string
 }
 
 const initState = {
-    isPalette: false
+    isPalette: false,
+    isPenSize: false,
+    colorIcon: 'black'
 }
 
 
@@ -27,7 +35,7 @@ const palette = ['#000000', '#FF4848', '#387CFF', '#3CFF72', '#D560FE', '#FF8A00
 
 
 
-const Menu: FunctionComponent<Props> = ({ refCanvas }) => {
+const Menu: FunctionComponent<Props> = ({ refCanvas, imgTest }) => {
 
     const [state, setState] = useState<State>(initState)
 
@@ -36,6 +44,15 @@ const Menu: FunctionComponent<Props> = ({ refCanvas }) => {
     const handleCallback = (ref: any, params: any) => () => {
 
         isModal = true
+
+        if (palette.includes(params))
+            setState({
+                ...state,
+                colorIcon: params,
+                isPalette: !state.isPalette
+            })
+
+        console.log(ref)
 
         switch (ref) {
 
@@ -62,18 +79,34 @@ const Menu: FunctionComponent<Props> = ({ refCanvas }) => {
                 key={key}
                 style={menu_styles.paletteWrapper}
                 onPress={handleCallback(refCanvas?.changePenColor, color)}>
-                <View style={{ backgroundColor: color, width: 20, height: 20 }}></View>
+                <View style={{ backgroundColor: color, width: 30, height: 30, borderRadius: 50 }}></View>
             </Pressable>
         )
     }
 
+    const __sendWhatsappMessage = async () => {
+        const result = await Share.share({
+            //url: `data:image/jpeg;base64,${imgTest}`,
+            url: imgTest
+        });
+    }
+
+
+ /*    const __handleTutorial = () => {
+        props.navigation.navigate('Home')
+    } */
+
     return (
 
-        <View>
-            <Pressable onPress={handlePalette}
+        <View style={menu_styles.menu}>
+            <Pressable
+                style={menu_styles.voiceMenu}
+                onPress={handlePalette}
             >
-
-                <Text style={styles.btn}>Color</Text>
+                <Text style={styles.btn}>
+                    Color
+                    <Ionicons name="color-palette" size={30} color={state.colorIcon} />
+                </Text>
             </Pressable>
             <View style={styles.containerFlexRow}>
 
@@ -85,39 +118,70 @@ const Menu: FunctionComponent<Props> = ({ refCanvas }) => {
             </View>
 
             <Pressable
+                style={menu_styles.voiceMenu}
                 onPress={handleCallback(refCanvas?.changePenSize, 3)}
             >
-                <Text style={styles.btn}>Pen Size</Text>
-            </Pressable>
-
-            <Pressable
-                onPress={handleCallback(refCanvas?.clearSignature, null)}
-            >
-                <Text
-                    style={styles.btn}
-                >
-                    Clear
+                <Text style={styles.btn}>
+                    Pen Size
+                    <Ionicons name="resize" size={30} color="black" />
                 </Text>
             </Pressable>
 
             <Pressable
+                style={menu_styles.voiceMenu}
+                onPress={handleCallback(refCanvas?.clearSignature, null)}
             >
-                <Text style={styles.btn}>Camera</Text>
+                <Text style={styles.btn}>
+                    Clear
+                    <Ionicons name="clipboard" size={30} color="black" />
+                </Text>
             </Pressable>
 
             <Pressable
+                style={menu_styles.voiceMenu}
             >
-                <Text style={styles.btn}>Gallery</Text>
+                <Text style={styles.btn}>
+                    Camera
+                    <Ionicons name="camera" size={30} color="black" />
+                </Text>
             </Pressable>
 
             <Pressable
+                style={menu_styles.voiceMenu}
             >
-                <Text style={styles.btn}>Save</Text>
+                <Text style={styles.btn}>
+                    Gallery
+                    <Ionicons name="images" size={30} color="black" />
+                </Text>
             </Pressable>
 
             <Pressable
+                style={menu_styles.voiceMenu}
             >
-                <Text style={styles.btn}>WhatsApp</Text>
+                <Text style={styles.btn}>
+                    Save
+                    <Ionicons name="save" size={30} color="black" />
+                </Text>
+            </Pressable>
+
+            <Pressable
+                style={menu_styles.voiceMenu}
+                onPress={__sendWhatsappMessage}
+            >
+                <Text style={styles.btn}>
+                    WhatsApp
+                    <Ionicons name="logo-whatsapp" size={30} color="black" />
+                </Text>
+            </Pressable>
+
+            <Pressable
+                style={menu_styles.voiceMenu}
+                //onPress={__handleTutorial}
+            >
+                <Text style={styles.btn}>
+                    Tutorial
+                    <Ionicons name="logo-whatsapp" size={30} color="black" />
+                </Text>
             </Pressable>
 
         </View>

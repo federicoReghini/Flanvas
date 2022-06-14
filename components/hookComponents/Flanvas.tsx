@@ -10,6 +10,7 @@ import Navbar from "./Navbar";
 import CustomModal from "./CustomModal";
 import CustomCamera from "./CustomCamera";
 
+
 // utils
 // import { __on, __remove } from "../../utils/eventBus";
 
@@ -21,12 +22,14 @@ interface Props {
 interface State {
     isModal: boolean,
     image: string | undefined,
+    imageBackground: string | undefined
     isCamera: boolean
 }
 
 const initState = {
     isModal: false,
     image: '',
+    imageBackground: '',
     isCamera: false
 }
 
@@ -35,7 +38,6 @@ const style = `.m-signature-pad {box-shadow: none; border: 1px,solid; }
 .m-signature-pad--footer {display: none; margin: 0px;}
 body,html {
 width: 100%; height: 100%;}`;
-
 
 
 const Flanvas: React.FC<Props> = () => {
@@ -59,9 +61,11 @@ const Flanvas: React.FC<Props> = () => {
     //     }
     // }, [] )
 
-    const __handleSignature = (signature: string) => {  // da controllare l'immagine. ci salva una immagine nera ora. ma siamo vicini alla soluzione
-        const path = FileSystem.cacheDirectory + "sign.png"; //questo è da cambiare sicuro ed è probabilmente il nostro problema ora
-        
+    const __handleSignature = (signature: string) => {
+
+        const path = FileSystem.cacheDirectory + "sign.png";
+        console.log(path)
+
         FileSystem.writeAsStringAsync(
             path,
             signature.replace("data:image/png;base64,", ""),
@@ -71,8 +75,8 @@ const Flanvas: React.FC<Props> = () => {
             .then(res => {
                 console.log('qui');
                 MediaLibrary.createAssetAsync(res?.uri)
-                
-                setState({...state, image: res?.uri})
+
+                setState({ ...state, image: res?.uri })
             })
             .catch(console.error);
     };
@@ -96,13 +100,18 @@ const Flanvas: React.FC<Props> = () => {
             isEraser = true
         }
     }
+
     // const __handleEnd = () => {
     //     ref.current?.readSignature()
     // }
 
     const handleMenu_ = () => {
+
+        let img: string | undefined = ref.current?.readSignature()
+
         setState({
             ...state,
+            image: img,
             isModal: !state.isModal
         });
     };
@@ -119,13 +128,14 @@ const Flanvas: React.FC<Props> = () => {
     }
 
     const saveImage_ = (e: string | undefined) => {
-        console.log(e);
 
         setState({
             ...state,
-            image: e
+            imageBackground: e,
+            isCamera: !state.isCamera
         })
     }
+
 
     return (
         <>
@@ -138,9 +148,9 @@ const Flanvas: React.FC<Props> = () => {
                     //onClear={__handleRef(ref.current?.clearSignature)}
                     autoClear={false}
                     webStyle={style}
-                    bgSrc={state.image}
-                    bgWidth={300}
-                    bgHeight={300}
+                    dataURL={"data:image/png;base64," + state.imageBackground}
+                //bgWidth={300}
+                //bgHeight={300}
                 //descriptionText={text}
                 />
                 :
@@ -156,7 +166,8 @@ const Flanvas: React.FC<Props> = () => {
                 callbackConfirm={__handleConfirm}
             />
 
-            <CustomModal modalIsVisible={state.isModal} callback={handleMenu_} refCanvas={ref.current} />
+            {/*Cambiare nome a imgTest, immagine passata a menu per social */}
+            <CustomModal modalIsVisible={state.isModal} callback={handleMenu_} refCanvas={ref.current} imgTest={state.image} />
 
         </>
     );
