@@ -1,7 +1,9 @@
-import React, { useMemo, useRef, useState } from "react";
+import React, { useRef, useState } from "react";
 
 // native components
 import SignatureScreen, { SignatureViewRef, } from "react-native-signature-canvas";
+import * as FileSystem from "expo-file-system";
+import * as MediaLibrary from 'expo-media-library'
 
 // components
 import Navbar from "./Navbar";
@@ -57,9 +59,22 @@ const Flanvas: React.FC<Props> = () => {
     //     }
     // }, [] )
 
-    const __handleSignature = (signature: string) => {
-        // console.log(signature);
-        // onOK(signature);
+    const __handleSignature = (signature: string) => {  // da controllare l'immagine. ci salva una immagine nera ora. ma siamo vicini alla soluzione
+        const path = FileSystem.cacheDirectory + "sign.png"; //questo è da cambiare sicuro ed è probabilmente il nostro problema ora
+        
+        FileSystem.writeAsStringAsync(
+            path,
+            signature.replace("data:image/png;base64,", ""),
+            { encoding: FileSystem.EncodingType.Base64 }
+        )
+            .then(() => FileSystem.getInfoAsync(path))
+            .then(res => {
+                console.log('qui');
+                MediaLibrary.createAssetAsync(res?.uri)
+                
+                setState({...state, image: res?.uri})
+            })
+            .catch(console.error);
     };
 
     const __handleRef = (ref: any) => () => {
@@ -81,9 +96,9 @@ const Flanvas: React.FC<Props> = () => {
             isEraser = true
         }
     }
-    const __handleEnd = () => {
-        ref.current?.readSignature()
-    }
+    // const __handleEnd = () => {
+    //     ref.current?.readSignature()
+    // }
 
     const handleMenu_ = () => {
         setState({
@@ -97,6 +112,10 @@ const Flanvas: React.FC<Props> = () => {
             ...state,
             isCamera: !state.isCamera
         })
+    }
+
+    const __handleConfirm = () => {
+        ref.current?.readSignature();
     }
 
     const saveImage_ = (e: string | undefined) => {
@@ -113,7 +132,7 @@ const Flanvas: React.FC<Props> = () => {
             {!state.isCamera ?
                 <SignatureScreen
                     ref={ref}
-                    onEnd={__handleEnd}
+                    // onEnd={__handleEnd}
                     onOK={__handleSignature}
                     // onEmpty={__handleEmpty}
                     //onClear={__handleRef(ref.current?.clearSignature)}
@@ -134,6 +153,7 @@ const Flanvas: React.FC<Props> = () => {
                 callbackPenEraser={__handlePenEraser}
                 callbackMenu={handleMenu_}
                 callbackCamera={__handleCamera_}
+                callbackConfirm={__handleConfirm}
             />
 
             <CustomModal modalIsVisible={state.isModal} callback={handleMenu_} refCanvas={ref.current} />
