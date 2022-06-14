@@ -12,9 +12,6 @@ interface Props {
 
 const Navbar: FunctionComponent<Props> = ({ callbackUndo, callbackRedo, callbackPenEraser, callbackMenu, callbackCamera }) => {
 
-
-
-
     return (
 
         <View
