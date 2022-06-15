@@ -1,4 +1,4 @@
-import React, { useCallback, useMemo, useRef, useState } from "react";
+import React, { useRef, useState } from "react";
 
 // native components
 import SignatureScreen, { SignatureViewRef, } from "react-native-signature-canvas";
@@ -52,17 +52,39 @@ const Flanvas: React.FC<Props> = () => {
         )
             .then(() => FileSystem.getInfoAsync(path))
             .then(res => {
+                if(MediaLibrary.getAlbumAsync('flanvas') !== null){
+                    MediaLibrary.createAssetAsync(res?.uri)
+                    .then( asset => {
+                        MediaLibrary.getAlbumAsync('flanvas').then(album => {
+                            MediaLibrary.addAssetsToAlbumAsync(asset.id, album.id, false)
+                        })
+                    })
+                }
                 MediaLibrary.createAssetAsync(res?.uri)
+                .then( res => {
+                    MediaLibrary.createAlbumAsync('flanvas', res.id, false)
+                    
+                })
 
                 setState({ ...state, image: res?.uri })
             })
             .catch(console.error);
     };
 
-    const __handleRef = (ref: any) => () => {
-        console.log('here: ', ref);
+    // const __handleRef = (ref: any) => () => {
 
-        return ref();
+    //     if (ref !== undefined) {
+
+    //         return ref();
+    //     }
+    // }
+
+    const __handleUndo = () => {
+        ref.current?.undo();
+    }
+
+    const __handleRedo = () => {
+        ref.current?.redo();
     }
 
     // const __handleEmpty = () => {
@@ -73,11 +95,11 @@ const Flanvas: React.FC<Props> = () => {
         if (isEraser) {
             ref.current?.draw()
             ref.current?.changePenSize(1, 1)
-            return isEraser = false
+            isEraser = false
         } else {
             ref.current?.erase()
             ref.current?.changePenSize(10, 10)
-            return isEraser = true
+            isEraser = true
         }
     }
 
@@ -139,8 +161,8 @@ const Flanvas: React.FC<Props> = () => {
             }
 
             <Navbar
-                callbackUndo={__handleRef(ref.current?.undo)}
-                callbackRedo={__handleRef(ref.current?.redo)}
+                callbackUndo={__handleUndo}
+                callbackRedo={__handleRedo}
                 callbackPenEraser={__handlePenEraser}
                 callbackMenu={handleMenu_}
                 callbackCamera={__handleCamera_}
@@ -154,4 +176,4 @@ const Flanvas: React.FC<Props> = () => {
     );
 };
 
-export default React.memo(Flanvas);
+export default Flanvas;

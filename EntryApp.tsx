@@ -7,15 +7,16 @@ import { Camera } from 'expo-camera';
 import * as MediaLibrary from 'expo-media-library';
 
 //Asyncstorage
-import AsyncStorage from '@react-native-async-storage/async-storage'
+import { clearStorage, getStorage, setStorage } from './utils/storage';
 
 // screens
 import Home from './screens/Home';
 import Tutorial from './screens/Tutorial';
 
 type RootStackParamList = {
-    Home: undefined;
-    Tutorial: {isFirstTime: boolean};
+    Home: undefined,
+    Tutorial: { isFirstTime: boolean },
+    Menu: undefined
 };
 
 interface State {
@@ -39,21 +40,27 @@ const EntryApp: FC = (): ReactElement => {
 
         (async (): Promise<void> => {
 
-            //await AsyncStorage.clear()
+            // await clearStorage()
 
             const [CAMERA, MEDIA, STORAGE] = await Promise.all([
                 Camera.getCameraPermissionsAsync(),
                 MediaLibrary.requestPermissionsAsync(),
-                AsyncStorage.getItem('firstTime')
+                getStorage('firstTime')
             ]);
 
             if ((CAMERA.status && MEDIA.status) === "granted") {
                 newState.isPermission = true;
             }
 
-            if (STORAGE !== null) {
-                newState.isFirstTime = JSON.parse(STORAGE)
+            if (STORAGE !== undefined) {
+                newState.isFirstTime = STORAGE;
+            } else {
+
+                await setStorage('firstTime', true)
+                newState.isFirstTime = true
             }
+
+
 
             setState(newState);
         })()
@@ -97,9 +104,6 @@ const EntryApp: FC = (): ReactElement => {
                             headerShown: false
                         }}
                     />
-
-
-
                 </Stack.Navigator>
             </NavigationContainer>
 

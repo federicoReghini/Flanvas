@@ -1,9 +1,9 @@
 import React, { FunctionComponent, useState, ReactElement } from 'react';
 
 // native components
-import { View, Text, Pressable, Share } from 'react-native';
+import { View, Text, Pressable, TouchableOpacity } from 'react-native';
 import * as Sharing from 'expo-sharing';
-
+import * as MediaLibrary from 'expo-media-library';
 
 //Ionicons
 import Ionicons from '@expo/vector-icons/Ionicons';
@@ -16,19 +16,21 @@ import { menu_styles } from '../../assets/styles/menu_styles';
 import { signatureRef } from '../../utils/ts/types';
 interface Props {
     refCanvas: signatureRef,
-    imgTest: string
+    imgTest: string,
 }
 
 interface State {
     isPalette: boolean
     isPenSize: boolean
     colorIcon: string
+    assets: Array<object>
 }
 
 const initState = {
     isPalette: false,
     isPenSize: false,
-    colorIcon: 'black'
+    colorIcon: 'white',
+    assets: []
 }
 
 
@@ -39,13 +41,9 @@ const palette = ['#000000', '#FF4848', '#387CFF', '#3CFF72', '#D560FE', '#FF8A00
 
 const Menu: FunctionComponent<Props> = ({ refCanvas, imgTest }) => {
 
-    const [state, setState] = useState<State>(initState)
-
-    let isModal: boolean = false;
+    const [state, setState] = useState<State>(initState);
 
     const handleCallback = (ref: any, params: any) => () => {
-
-        isModal = true
 
         if (palette.includes(params))
             setState({
@@ -73,48 +71,69 @@ const Menu: FunctionComponent<Props> = ({ refCanvas, imgTest }) => {
         })
     }
 
+    const __handleGallery = async () =>{
+        const RESULT = await MediaLibrary.getAlbumAsync('flanvas')
+        const ASSETS = await MediaLibrary.getAssetsAsync({album: RESULT.id})
+        setState({
+            ...state,
+            assets: ASSETS.assets
+        })
+        
+    }
+
     const map = (color: string, key: number): ReactElement => {
         return (
-            <Pressable
+            <TouchableOpacity
                 key={key}
                 style={menu_styles.paletteWrapper}
-                onPress={handleCallback(refCanvas?.changePenColor, color)}>
+                onPress={handleCallback(refCanvas?.changePenColor, color)}
+                >
                 <View style={{ backgroundColor: color, width: 30, height: 30, borderRadius: 50 }}></View>
-            </Pressable>
+            </TouchableOpacity>
         )
     }
+
+    // const asset = (asset: string, key: number): ReactElement => {
+    //     return (
+    //         <TouchableOpacity
+    //             key={key}
+    //             style={}
+    //             onPress={}
+    //             >
+    //         </TouchableOpacity>
+    //     )
+    // }
 
     const __sendWhatsappMessage = async () => {
         const result = await Sharing.isAvailableAsync();
 
-        if(result){
+        if (result) {
             await Sharing.shareAsync(imgTest, {
                 dialogTitle: 'che figata di disegno'
             })
         }
         // const result = await Share.share({
-            //url: `data:image/jpeg;base64,${imgTest}`,
+        //url: `data:image/jpeg;base64,${imgTest}`,
         //     url: imgTest
         // });
     }
 
 
- /*    const __handleTutorial = () => {
-        props.navigation.navigate('Home')
-    } */
+    /*    const __handleTutorial = () => {
+           props.navigation.navigate('Home')
+       } */
 
     return (
 
         <View style={menu_styles.menu}>
-            <Pressable
+            <TouchableOpacity
                 style={menu_styles.voiceMenu}
                 onPress={handlePalette}
             >
                 <Text style={styles.btn}>
-                    Color
                     <Ionicons name="color-palette" size={30} color={state.colorIcon} />
                 </Text>
-            </Pressable>
+            </TouchableOpacity>
             <View style={styles.containerFlexRow}>
 
                 {
@@ -124,72 +143,68 @@ const Menu: FunctionComponent<Props> = ({ refCanvas, imgTest }) => {
 
             </View>
 
-            <Pressable
+            <TouchableOpacity
                 style={menu_styles.voiceMenu}
                 onPress={handleCallback(refCanvas?.changePenSize, 3)}
             >
                 <Text style={styles.btn}>
-                    Pen Size
-                    <Ionicons name="resize" size={30} color="black" />
+                    <Ionicons name="resize" size={30} color="white" />
                 </Text>
-            </Pressable>
+            </TouchableOpacity>
 
-            <Pressable
+            <TouchableOpacity
                 style={menu_styles.voiceMenu}
                 onPress={handleCallback(refCanvas?.clearSignature, null)}
             >
                 <Text style={styles.btn}>
-                    Clear
-                    <Ionicons name="clipboard" size={30} color="black" />
+                    <Ionicons name="clipboard" size={30} color="white" />
                 </Text>
-            </Pressable>
-
-            <Pressable
+            </TouchableOpacity>
+{/* 
+            <TouchableOpacity
                 style={menu_styles.voiceMenu}
             >
                 <Text style={styles.btn}>
-                    Camera
-                    <Ionicons name="camera" size={30} color="black" />
+                    <Ionicons name="camera" size={30} color="white" />
                 </Text>
-            </Pressable>
+            </TouchableOpacity> */}
 
-            <Pressable
+            <TouchableOpacity
                 style={menu_styles.voiceMenu}
+                onPress={__handleGallery}
             >
                 <Text style={styles.btn}>
-                    Gallery
-                    <Ionicons name="images" size={30} color="black" />
+                    <Ionicons name="images" size={30} color="white" />
                 </Text>
-            </Pressable>
+            </TouchableOpacity>
 
-            <Pressable
+            {/* <TouchableOpacity
                 style={menu_styles.voiceMenu}
             >
                 <Text style={styles.btn}>
                     Save
-                    <Ionicons name="save" size={30} color="black" />
+                    <Ionicons name="save" size={30} color="white" />
                 </Text>
-            </Pressable>
+            </TouchableOpacity> */}
 
-            <Pressable
+            <TouchableOpacity
                 style={menu_styles.voiceMenu}
                 onPress={__sendWhatsappMessage}
             >
                 <Text style={styles.btn}>
-                    WhatsApp
-                    <Ionicons name="logo-whatsapp" size={30} color="black" />
+                    <Ionicons name="share" size={30} color="white" />
                 </Text>
-            </Pressable>
+            </TouchableOpacity>
 
-            <Pressable
+            <TouchableOpacity
                 style={menu_styles.voiceMenu}
-                //onPress={__handleTutorial}
+            //onPress={__handleTutorial}
             >
                 <Text style={styles.btn}>
                     Tutorial
-                    <Ionicons name="logo-whatsapp" size={30} color="black" />
+                    <Ionicons name="logo-whatsapp" size={30} color="white" />
                 </Text>
-            </Pressable>
+            </TouchableOpacity>
 
         </View>
     )
