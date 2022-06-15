@@ -14,29 +14,14 @@ interface State {
   isFirstTime: boolean //variabile per capire se é la prima volta che apre l'app
 }
 
-const initState = {
-  isFirstTime: true
-}
 
-const Tutorial = (props) => {
+const Tutorial = ({ route, navigation }) => {
 
-  const [state, setState] = useState<State>(initState)
-
-  const getItemFromStorage_ = async (): Promise<void> => {
-
-    const value = await AsyncStorage.getItem('firstTime')
-    const newState = Object.assign({}, state)
-
-    if (value !== null) {
-      newState.isFirstTime = JSON.parse(value)
-    }
-
-    setState(newState)
+  const initState = {
+    isFirstTime: route.params.isFirstTime
   }
 
-  useEffect(() => {
-    getItemFromStorage_()
-  }, [])
+  const [state, setState] = useState<State>(initState)
 
   return (
     <View style={{ flex: 1 }}>
@@ -44,7 +29,7 @@ const Tutorial = (props) => {
         state.isFirstTime ?
           <TutorialFirst />
           :
-          <TutorialComponent navigation={props.navigation} />
+          <TutorialComponent navigation={navigation} />
       }
     </View>
   )
