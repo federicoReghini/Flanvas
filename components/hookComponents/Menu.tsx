@@ -52,8 +52,6 @@ const Menu: FunctionComponent<Props> = ({ refCanvas, imgTest }) => {
                 isPalette: !state.isPalette
             })
 
-        console.log(ref)
-
         switch (ref) {
 
             case refCanvas?.changePenColor: return refCanvas?.changePenColor(params);

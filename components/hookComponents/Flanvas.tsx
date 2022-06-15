@@ -1,4 +1,4 @@
-import React, { useRef, useState } from "react";
+import React, { useCallback, useMemo, useRef, useState } from "react";
 
 // native components
 import SignatureScreen, { SignatureViewRef, } from "react-native-signature-canvas";
@@ -44,7 +44,6 @@ const Flanvas: React.FC<Props> = () => {
     const __handleSignature = (signature: string) => {
 
         const path = FileSystem.cacheDirectory + "sign.png";
-        console.log(path)
 
         FileSystem.writeAsStringAsync(
             path,
@@ -60,31 +59,31 @@ const Flanvas: React.FC<Props> = () => {
             .catch(console.error);
     };
 
-    const __handleRef = (ref: any) => () => {
+    const __handleRef = useCallback( (ref: any) => () => {
         return ref();
-    }
+    }, [ref])
 
     // const __handleEmpty = () => {
     //     console.log("Empty");
     // };
 
-    const __handlePenEraser = () => {
+    const __handlePenEraser = useCallback(() => {
         if (isEraser) {
             ref.current?.draw()
             ref.current?.changePenSize(1, 1)
-            isEraser = false
+             return isEraser = false
         } else {
             ref.current?.erase()
             ref.current?.changePenSize(10, 10)
-            isEraser = true
+             return isEraser = true
         }
-    }
+    }, [isEraser])
 
     // const __handleEnd = () => {
     //     ref.current?.readSignature()
     // }
 
-    const handleMenu_ = () => {
+    const handleMenu_ = useCallback(() => {
 
         let img: any = ref.current?.readSignature()
 
@@ -93,27 +92,27 @@ const Flanvas: React.FC<Props> = () => {
             image: img,
             isModal: !state.isModal
         });
-    };
+    }, [state.image, state.isModal])
 
-    const __handleCamera_ = () => {
+    const __handleCamera_ = useCallback(() => {
         setState({
             ...state,
             isCamera: !state.isCamera
         })
-    }
+    }, [state.isCamera])
 
-    const __handleConfirm = () => {
+    const __handleConfirm = useCallback(() => {
         ref.current?.readSignature();
-    }
+    }, [])
 
-    const saveImage_ = (e: string | undefined) => {
+    const saveImage_ = useCallback((e: string | undefined) => {
 
         setState({
             ...state,
             imageBackground: e,
             isCamera: !state.isCamera
         })
-    }
+    }, [state.imageBackground, state.isCamera])
 
     return (
         <>
@@ -153,4 +152,4 @@ const Flanvas: React.FC<Props> = () => {
     );
 };
 
-export default Flanvas;
+export default React.memo(Flanvas);
