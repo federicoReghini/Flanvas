@@ -6,6 +6,8 @@ import { NavigationContainer } from '@react-navigation/native';
 import { Camera } from 'expo-camera';
 import * as MediaLibrary from 'expo-media-library';
 
+//Asyncstorage
+import AsyncStorage from '@react-native-async-storage/async-storage'
 
 // screens
 import Home from './screens/Home';
@@ -13,11 +15,12 @@ import Tutorial from './screens/Tutorial';
 
 type RootStackParamList = {
     Home: undefined;
-    Tutorial: undefined;
+    Tutorial: {isFirstTime: boolean};
 };
 
 interface State {
     isPermission: boolean
+    isFirstTime?: boolean
 }
 
 const initState = {
@@ -28,7 +31,7 @@ const EntryApp: FC = (): ReactElement => {
 
     const Stack = createStackNavigator<RootStackParamList>();
 
-    const [state, setState] = useState(initState);
+    const [state, setState] = useState<State>(initState);
 
     const handleUseEffect = (): void => {
 
@@ -36,13 +39,20 @@ const EntryApp: FC = (): ReactElement => {
 
         (async (): Promise<void> => {
 
-            const [CAMERA, MEDIA] = await Promise.all([
+            //await AsyncStorage.clear()
+
+            const [CAMERA, MEDIA, STORAGE] = await Promise.all([
                 Camera.getCameraPermissionsAsync(),
-                MediaLibrary.requestPermissionsAsync()
+                MediaLibrary.requestPermissionsAsync(),
+                AsyncStorage.getItem('firstTime')
             ]);
 
             if ((CAMERA.status && MEDIA.status) === "granted") {
                 newState.isPermission = true;
+            }
+
+            if (STORAGE !== null) {
+                newState.isFirstTime = JSON.parse(STORAGE)
             }
 
             setState(newState);
@@ -55,7 +65,7 @@ const EntryApp: FC = (): ReactElement => {
         <>
             <NavigationContainer>
                 <Stack.Navigator
-                    initialRouteName={'Tutorial'}
+                    initialRouteName={state.isFirstTime ? 'Tutorial' : 'Home'}
                 >
 
                     <Stack.Screen
@@ -75,6 +85,9 @@ const EntryApp: FC = (): ReactElement => {
                                 }
                             }
                         }
+                        initialParams={{
+                            isFirstTime: state.isFirstTime
+                        }}
                     />
 
                     <Stack.Screen

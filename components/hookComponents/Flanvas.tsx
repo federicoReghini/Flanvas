@@ -60,6 +60,8 @@ const Flanvas: React.FC<Props> = () => {
     };
 
     const __handleRef = (ref: any) => () => {
+        console.log('here: ', ref);
+
         return ref();
     }
 
@@ -71,11 +73,11 @@ const Flanvas: React.FC<Props> = () => {
         if (isEraser) {
             ref.current?.draw()
             ref.current?.changePenSize(1, 1)
-             return isEraser = false
+            return isEraser = false
         } else {
             ref.current?.erase()
             ref.current?.changePenSize(10, 10)
-             return isEraser = true
+            return isEraser = true
         }
     }
 
@@ -118,7 +120,7 @@ const Flanvas: React.FC<Props> = () => {
         <>
 
             {!state.isCamera ?
-                
+
                 <SignatureScreen
                     ref={ref}
                     // onEnd={__handleEnd}
