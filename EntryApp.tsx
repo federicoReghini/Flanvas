@@ -55,7 +55,7 @@ const EntryApp: FC = (): ReactElement => {
         <>
             <NavigationContainer>
                 <Stack.Navigator
-                    initialRouteName={'Home'}
+                    initialRouteName={'Tutorial'}
                 >
 
                     <Stack.Screen

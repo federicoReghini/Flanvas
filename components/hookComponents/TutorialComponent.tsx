@@ -23,7 +23,7 @@ type RootStackParamList = {
 
 type Props = NativeStackScreenProps<RootStackParamList>;
 
-const Tutorial: FunctionComponent<Props> = ({ navigation }): ReactElement => {
+const TutorialComponent: FunctionComponent<Props> = ({ navigation }): ReactElement => {
 
     const [state, setState] = useState<State>(initState);
 
@@ -126,4 +126,4 @@ const Tutorial: FunctionComponent<Props> = ({ navigation }): ReactElement => {
     );
 };
 
-export default Tutorial;
+export default TutorialComponent;

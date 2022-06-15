@@ -1,4 +1,4 @@
-import React, { useRef, useState } from "react";
+import React, { useCallback, useMemo, useRef, useState } from "react";
 
 // native components
 import SignatureScreen, { SignatureViewRef, } from "react-native-signature-canvas";
@@ -9,24 +9,21 @@ import * as MediaLibrary from 'expo-media-library'
 import Navbar from "./Navbar";
 import CustomModal from "./CustomModal";
 import CustomCamera from "./CustomCamera";
-
-// utils
-// import { __on, __remove } from "../../utils/eventBus";
-
 interface Props {
     // text: string;
     onOK?: Function
 }
-
 interface State {
     isModal: boolean,
-    image: string | undefined,
+    image: string,
+    imageBackground: string | undefined
     isCamera: boolean
 }
 
 const initState = {
     isModal: false,
     image: '',
+    imageBackground: '',
     isCamera: false
 }
 
@@ -37,7 +34,6 @@ body,html {
 width: 100%; height: 100%;}`;
 
 
-
 const Flanvas: React.FC<Props> = () => {
 
     const ref = useRef<SignatureViewRef>(null);
@@ -45,23 +41,10 @@ const Flanvas: React.FC<Props> = () => {
 
     let isEraser: boolean = false;
 
+    const __handleSignature = (signature: string) => {
 
-    // working on it
-    // useEffect(()=>{
+        const path = FileSystem.cacheDirectory + "sign.png";
 
-    //     __on('image', e => setState({
-    //         ...state,
-    //         image: e
-    //     }))
-
-    //     return () => {
-    //         __remove()
-    //     }
-    // }, [] )
-
-    const __handleSignature = (signature: string) => {  // da controllare l'immagine. ci salva una immagine nera ora. ma siamo vicini alla soluzione
-        const path = FileSystem.cacheDirectory + "sign.png"; //questo è da cambiare sicuro ed è probabilmente il nostro problema ora
-        
         FileSystem.writeAsStringAsync(
             path,
             signature.replace("data:image/png;base64,", ""),
@@ -69,67 +52,73 @@ const Flanvas: React.FC<Props> = () => {
         )
             .then(() => FileSystem.getInfoAsync(path))
             .then(res => {
-                console.log('qui');
                 MediaLibrary.createAssetAsync(res?.uri)
-                
-                setState({...state, image: res?.uri})
+
+                setState({ ...state, image: res?.uri })
             })
             .catch(console.error);
     };
 
-    const __handleRef = (ref: any) => () => {
+    const __handleRef = useCallback( (ref: any) => () => {
         return ref();
-    }
+    }, [ref])
 
     // const __handleEmpty = () => {
     //     console.log("Empty");
     // };
 
-    const __handlePenEraser = () => {
+    const __handlePenEraser = useCallback(() => {
         if (isEraser) {
             ref.current?.draw()
             ref.current?.changePenSize(1, 1)
-            isEraser = false
+             return isEraser = false
         } else {
             ref.current?.erase()
             ref.current?.changePenSize(10, 10)
-            isEraser = true
+             return isEraser = true
         }
-    }
+    }, [isEraser])
+
     // const __handleEnd = () => {
     //     ref.current?.readSignature()
     // }
 
-    const handleMenu_ = () => {
+    const handleMenu_ = useCallback(() => {
+
+        let img: any = ref.current?.readSignature()
+
         setState({
             ...state,
+            image: img,
             isModal: !state.isModal
         });
-    };
+    }, [state.image, state.isModal])
 
-    const __handleCamera_ = () => {
+    const __handleCamera_ = useCallback(() => {
         setState({
             ...state,
             isCamera: !state.isCamera
         })
-    }
+    }, [state.isCamera])
 
-    const __handleConfirm = () => {
+    const __handleConfirm = useCallback(() => {
         ref.current?.readSignature();
-    }
+    }, [])
 
-    const saveImage_ = (e: string | undefined) => {
-        console.log(e);
+    const saveImage_ = useCallback((e: string | undefined) => {
 
         setState({
             ...state,
-            image: e
+            imageBackground: e,
+            isCamera: !state.isCamera
         })
-    }
+    }, [state.imageBackground, state.isCamera])
 
     return (
         <>
+
             {!state.isCamera ?
+                
                 <SignatureScreen
                     ref={ref}
                     // onEnd={__handleEnd}
@@ -138,9 +127,9 @@ const Flanvas: React.FC<Props> = () => {
                     //onClear={__handleRef(ref.current?.clearSignature)}
                     autoClear={false}
                     webStyle={style}
-                    bgSrc={state.image}
-                    bgWidth={300}
-                    bgHeight={300}
+                    dataURL={"data:image/png;base64," + state.imageBackground}
+                //bgWidth={300}
+                //bgHeight={300}
                 //descriptionText={text}
                 />
                 :
@@ -156,10 +145,11 @@ const Flanvas: React.FC<Props> = () => {
                 callbackConfirm={__handleConfirm}
             />
 
-            <CustomModal modalIsVisible={state.isModal} callback={handleMenu_} refCanvas={ref.current} />
+            {/*Cambiare nome a imgTest, immagine passata a menu per social */}
+            <CustomModal modalIsVisible={state.isModal} callback={handleMenu_} refCanvas={ref.current} imgTest={state.image} />
 
         </>
     );
 };
 
-export default Flanvas;
+export default React.memo(Flanvas);
