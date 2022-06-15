@@ -59,15 +59,15 @@ const Flanvas: React.FC<Props> = () => {
             .catch(console.error);
     };
 
-    const __handleRef = useCallback( (ref: any) => () => {
+    const __handleRef = (ref: any) => () => {
         return ref();
-    }, [ref])
+    }
 
     // const __handleEmpty = () => {
     //     console.log("Empty");
     // };
 
-    const __handlePenEraser = useCallback(() => {
+    const __handlePenEraser = () => {
         if (isEraser) {
             ref.current?.draw()
             ref.current?.changePenSize(1, 1)
@@ -77,13 +77,13 @@ const Flanvas: React.FC<Props> = () => {
             ref.current?.changePenSize(10, 10)
              return isEraser = true
         }
-    }, [isEraser])
+    }
 
     // const __handleEnd = () => {
     //     ref.current?.readSignature()
     // }
 
-    const handleMenu_ = useCallback(() => {
+    const handleMenu_ = () => {
 
         let img: any = ref.current?.readSignature()
 
@@ -92,27 +92,27 @@ const Flanvas: React.FC<Props> = () => {
             image: img,
             isModal: !state.isModal
         });
-    }, [state.image, state.isModal])
+    }
 
-    const __handleCamera_ = useCallback(() => {
+    const __handleCamera_ = () => {
         setState({
             ...state,
             isCamera: !state.isCamera
         })
-    }, [state.isCamera])
+    }
 
-    const __handleConfirm = useCallback(() => {
+    const __handleConfirm = () => {
         ref.current?.readSignature();
-    }, [])
+    }
 
-    const saveImage_ = useCallback((e: string | undefined) => {
+    const saveImage_ = (e: string | undefined) => {
 
         setState({
             ...state,
             imageBackground: e,
             isCamera: !state.isCamera
         })
-    }, [state.imageBackground, state.isCamera])
+    }
 
     return (
         <>

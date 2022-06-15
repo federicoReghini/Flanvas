@@ -2,6 +2,8 @@ import React, { FunctionComponent, useState, ReactElement } from 'react';
 
 // native components
 import { View, Text, Pressable, Share } from 'react-native';
+import * as Sharing from 'expo-sharing';
+
 
 //Ionicons
 import Ionicons from '@expo/vector-icons/Ionicons';
@@ -83,10 +85,17 @@ const Menu: FunctionComponent<Props> = ({ refCanvas, imgTest }) => {
     }
 
     const __sendWhatsappMessage = async () => {
-        const result = await Share.share({
+        const result = await Sharing.isAvailableAsync();
+
+        if(result){
+            await Sharing.shareAsync(imgTest, {
+                dialogTitle: 'che figata di disegno'
+            })
+        }
+        // const result = await Share.share({
             //url: `data:image/jpeg;base64,${imgTest}`,
-            url: imgTest
-        });
+        //     url: imgTest
+        // });
     }
 
 
