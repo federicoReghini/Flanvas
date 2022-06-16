@@ -40,7 +40,7 @@ const EntryApp: FC = (): ReactElement => {
 
         (async (): Promise<void> => {
 
-            // await clearStorage()
+            await clearStorage()
 
             const [CAMERA, MEDIA, STORAGE] = await Promise.all([
                 Camera.getCameraPermissionsAsync(),

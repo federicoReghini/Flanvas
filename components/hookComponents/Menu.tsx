@@ -77,12 +77,12 @@ const Menu: FunctionComponent<Props> = ({ refCanvas, imgTest }) => {
     }
 
     const __handleGallery = async () => {
-        const RESULT = await MediaLibrary.getAlbumAsync('flanvas')
+      /*   const RESULT = await MediaLibrary.getAlbumAsync('flanvas')
         const ASSETS = await MediaLibrary.getAssetsAsync({ album: RESULT.id })
         setState({
             ...state,
             assets: ASSETS.assets
-        })
+        }) */
 
     }
 
