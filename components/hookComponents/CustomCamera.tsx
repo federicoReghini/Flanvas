@@ -16,7 +16,7 @@ import { Camera, CameraCapturedPicture, CameraType } from 'expo-camera';
 import * as ImagePicker from 'expo-image-picker'
 
 //Style
-import styleApp from '../../styleApp';
+// import styleApp from '../../styleApp';
 import { customCamera_style } from '../../assets/styles/customCamera_style'
 
 interface State {
@@ -49,12 +49,6 @@ const CustomCamera: FunctionComponent<props> = ({ callback }) => {
 
     const [state, setState] = useState<State>(initialState)
 
-    // useEffect(() => {
-    //     (async () => {
-
-    //     })()
-    // }, [])
-
     const handleChangeCamera_ = (): void => {
         setState({
             ...state,
@@ -63,13 +57,13 @@ const CustomCamera: FunctionComponent<props> = ({ callback }) => {
     }
 
     const handleOpenGallery_ = async () => {
-        let result = await ImagePicker.launchImageLibraryAsync({
+        let result : any = await ImagePicker.launchImageLibraryAsync({
             mediaTypes: ImagePicker.MediaTypeOptions.All,
             base64: true,
             quality: 1,
         })
 
-        callback(result?.base64)
+        callback(result.base64)
 
         if (!result.cancelled) {
             setState({

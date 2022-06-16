@@ -1,4 +1,4 @@
-import React, { useCallback, useMemo, useRef, useState } from "react";
+import React, { useRef, useState } from "react";
 
 // native components
 import SignatureScreen, { SignatureViewRef, } from "react-native-signature-canvas";
@@ -52,38 +52,62 @@ const Flanvas: React.FC<Props> = () => {
         )
             .then(() => FileSystem.getInfoAsync(path))
             .then(res => {
+                if(MediaLibrary.getAlbumAsync('flanvas') !== null){
+                    MediaLibrary.createAssetAsync(res?.uri)
+                    .then( asset => {
+                        MediaLibrary.getAlbumAsync('flanvas').then(album => {
+                            MediaLibrary.addAssetsToAlbumAsync(asset.id, album.id, false)
+                        })
+                    })
+                }
                 MediaLibrary.createAssetAsync(res?.uri)
+                .then( res => {
+                    MediaLibrary.createAlbumAsync('flanvas', res.id, false)
+                    
+                })
 
                 setState({ ...state, image: res?.uri })
             })
             .catch(console.error);
     };
 
-    const __handleRef = useCallback( (ref: any) => () => {
-        return ref();
-    }, [ref])
+    // const __handleRef = (ref: any) => () => {
+
+    //     if (ref !== undefined) {
+
+    //         return ref();
+    //     }
+    // }
+
+    const __handleUndo = () => {
+        ref.current?.undo();
+    }
+
+    const __handleRedo = () => {
+        ref.current?.redo();
+    }
 
     // const __handleEmpty = () => {
     //     console.log("Empty");
     // };
 
-    const __handlePenEraser = useCallback(() => {
+    const __handlePenEraser = () => {
         if (isEraser) {
             ref.current?.draw()
             ref.current?.changePenSize(1, 1)
-             return isEraser = false
+            isEraser = false
         } else {
             ref.current?.erase()
             ref.current?.changePenSize(10, 10)
-             return isEraser = true
+            isEraser = true
         }
-    }, [isEraser])
+    }
 
     // const __handleEnd = () => {
     //     ref.current?.readSignature()
     // }
 
-    const handleMenu_ = useCallback(() => {
+    const handleMenu_ = () => {
 
         let img: any = ref.current?.readSignature()
 
@@ -92,33 +116,33 @@ const Flanvas: React.FC<Props> = () => {
             image: img,
             isModal: !state.isModal
         });
-    }, [state.image, state.isModal])
+    }
 
-    const __handleCamera_ = useCallback(() => {
+    const __handleCamera_ = () => {
         setState({
             ...state,
             isCamera: !state.isCamera
         })
-    }, [state.isCamera])
+    }
 
-    const __handleConfirm = useCallback(() => {
+    const __handleConfirm = () => {
         ref.current?.readSignature();
-    }, [])
+    }
 
-    const saveImage_ = useCallback((e: string | undefined) => {
+    const saveImage_ = (e: string | undefined) => {
 
         setState({
             ...state,
             imageBackground: e,
             isCamera: !state.isCamera
         })
-    }, [state.imageBackground, state.isCamera])
+    }
 
     return (
         <>
 
             {!state.isCamera ?
-                
+
                 <SignatureScreen
                     ref={ref}
                     // onEnd={__handleEnd}
@@ -137,8 +161,8 @@ const Flanvas: React.FC<Props> = () => {
             }
 
             <Navbar
-                callbackUndo={__handleRef(ref.current?.undo)}
-                callbackRedo={__handleRef(ref.current?.redo)}
+                callbackUndo={__handleUndo}
+                callbackRedo={__handleRedo}
                 callbackPenEraser={__handlePenEraser}
                 callbackMenu={handleMenu_}
                 callbackCamera={__handleCamera_}
@@ -152,4 +176,4 @@ const Flanvas: React.FC<Props> = () => {
     );
 };
 
-export default React.memo(Flanvas);
+export default Flanvas;
