@@ -1,5 +1,5 @@
 import React, { FunctionComponent, useEffect, useState } from 'react';
-import { View, Text, Pressable, Alert } from 'react-native';
+import { View, Text, TouchableOpacity, Alert } from 'react-native';
 
 //Styles
 import { styles } from '../../styles_generic';
@@ -73,7 +73,7 @@ const Navbar: FunctionComponent<Props> = ({ callbackUndo, callbackRedo, callback
 
         <View
             style={styles.containerFlexRow}>
-            <Pressable
+            <TouchableOpacity
                 disabled={state.isTutorial === false ? state.isTutorial : state.count === 0 ? !state.isTutorial : state.isTutorial}
                 onPress={__handleOnPress(callbackUndo)}
                 style={navbar_style.button}
@@ -82,17 +82,17 @@ const Navbar: FunctionComponent<Props> = ({ callbackUndo, callbackRedo, callback
                 <Text style={navbar_style.icons}>
                     <Ionicons name="arrow-undo" size={30} color={state.isTutorial === false  ? 'white' : state.count === 0 ? 'white' : 'black'} />
                 </Text>
-            </Pressable>
+            </TouchableOpacity>
 
-            <Pressable
+            <TouchableOpacity
                 disabled={state.isTutorial === false ? state.isTutorial : state.count === 1 ? !state.isTutorial : state.isTutorial}
                 onPress={__handleOnPress(callbackRedo)} style={navbar_style.button}>
                 <Text style={navbar_style.icons}>
                     <Ionicons name="arrow-redo" size={30} color={state.isTutorial === false  ? 'white' : state.count === 1 ? 'white' : 'black'} />
                 </Text>
-            </Pressable>
+            </TouchableOpacity>
 
-            <Pressable
+            <TouchableOpacity
                 disabled={state.isTutorial === false ? state.isTutorial : state.count === 2 ? !state.isTutorial : state.isTutorial}
                 onPress={__handleOnPress(changePenEraser)} style={navbar_style.button}>
                 <Text style={navbar_style.icons}>
@@ -103,31 +103,31 @@ const Navbar: FunctionComponent<Props> = ({ callbackUndo, callbackRedo, callback
                             <Ionicons name="bandage-outline" size={30} color={state.isTutorial === false  ? 'white' : state.count === 2 ? 'white' : 'black'} />
                     }
                 </Text>
-            </Pressable>
+            </TouchableOpacity>
 
-            <Pressable
+            <TouchableOpacity
                 disabled={state.isTutorial === false ? state.isTutorial : state.count === 3 ? !state.isTutorial : state.isTutorial}
                 onPress={__handleOnPress(callbackCamera)} style={navbar_style.button}>
                 <Text style={navbar_style.icons}>
                     <Ionicons name="camera" size={30} color={state.isTutorial === false  ? 'white' : state.count === 3 ? 'white' : 'black'} />
                 </Text>
-            </Pressable>
+            </TouchableOpacity>
 
-            <Pressable
+            <TouchableOpacity
                 disabled={state.isTutorial === false ? state.isTutorial : state.count === 4 ? !state.isTutorial : state.isTutorial}
                 onPress={__handleOnPress(callbackConfirm)} style={navbar_style.button}>
                 <Text style={navbar_style.icons}>
                     <Ionicons name="save" size={30} color={state.isTutorial === false  ? 'white' : state.count === 4 ? 'white' : 'black'} />
                 </Text>
-            </Pressable>
+            </TouchableOpacity>
 
-            <Pressable
+            <TouchableOpacity
                 disabled={state.isTutorial === false ? state.isTutorial : state.count === 5 ? !state.isTutorial : state.isTutorial}
                 onPress={__handleOnPress(callbackMenu)} style={navbar_style.button}>
                 <Text style={navbar_style.icons}>
                     <Ionicons name="logo-react" size={30} color={state.isTutorial === false  ? 'white' : state.count === 5 ? 'white' : 'black'} />
                 </Text>
-            </Pressable>
+            </TouchableOpacity>
 
         </View>
 

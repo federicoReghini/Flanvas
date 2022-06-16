@@ -1,7 +1,7 @@
 import React, { FunctionComponent, useState, ReactElement } from 'react';
 
 // native components
-import { View, Text, Pressable, TouchableOpacity } from 'react-native';
+import { View, Text, TouchableOpacity, Share, Image } from 'react-native';
 import * as Sharing from 'expo-sharing';
 import * as MediaLibrary from 'expo-media-library';
 
@@ -14,6 +14,7 @@ import { menu_styles } from '../../assets/styles/menu_styles';
 
 // type
 import { signatureRef } from '../../utils/ts/types';
+import { ScrollView } from 'react-native-gesture-handler';
 interface Props {
     refCanvas: signatureRef,
     imgTest: string,
@@ -33,10 +34,7 @@ const initState = {
     assets: []
 }
 
-
-
 const palette = ['#000000', '#FF4848', '#387CFF', '#3CFF72', '#D560FE', '#FF8A00']
-
 
 
 const Menu: FunctionComponent<Props> = ({ refCanvas, imgTest }) => {
@@ -71,14 +69,14 @@ const Menu: FunctionComponent<Props> = ({ refCanvas, imgTest }) => {
         })
     }
 
-    const __handleGallery = async () =>{
+    const __handleGallery = async () => {
         const RESULT = await MediaLibrary.getAlbumAsync('flanvas')
-        const ASSETS = await MediaLibrary.getAssetsAsync({album: RESULT.id})
+        const ASSETS = await MediaLibrary.getAssetsAsync({ album: RESULT.id })
         setState({
             ...state,
             assets: ASSETS.assets
         })
-        
+
     }
 
     const map = (color: string, key: number): ReactElement => {
@@ -87,24 +85,20 @@ const Menu: FunctionComponent<Props> = ({ refCanvas, imgTest }) => {
                 key={key}
                 style={menu_styles.paletteWrapper}
                 onPress={handleCallback(refCanvas?.changePenColor, color)}
-                >
+            >
                 <View style={{ backgroundColor: color, width: 30, height: 30, borderRadius: 50 }}></View>
             </TouchableOpacity>
         )
     }
 
-    // const asset = (asset: string, key: number): ReactElement => {
-    //     return (
-    //         <TouchableOpacity
-    //             key={key}
-    //             style={}
-    //             onPress={}
-    //             >
-    //         </TouchableOpacity>
-    //     )
-    // }
+    const asset = (asset: object, key: number): ReactElement => {
 
-    const __sendWhatsappMessage = async () => {
+        return (
+            <Image key={key} source={asset.uri} style={{ width: 150, height: 150, borderWidth: 1 }} />
+        )
+    }
+
+    const __share = async () => {
         const result = await Sharing.isAvailableAsync();
 
         if (result) {
@@ -113,15 +107,10 @@ const Menu: FunctionComponent<Props> = ({ refCanvas, imgTest }) => {
             })
         }
         // const result = await Share.share({
-        //url: `data:image/jpeg;base64,${imgTest}`,
-        //     url: imgTest
+        // url: `data:image/jpeg;base64,${imgTest}`,
+        // url: imgTest
         // });
     }
-
-
-    /*    const __handleTutorial = () => {
-           props.navigation.navigate('Home')
-       } */
 
     return (
 
@@ -160,7 +149,7 @@ const Menu: FunctionComponent<Props> = ({ refCanvas, imgTest }) => {
                     <Ionicons name="clipboard" size={30} color="white" />
                 </Text>
             </TouchableOpacity>
-{/* 
+            {/* 
             <TouchableOpacity
                 style={menu_styles.voiceMenu}
             >
@@ -178,6 +167,12 @@ const Menu: FunctionComponent<Props> = ({ refCanvas, imgTest }) => {
                 </Text>
             </TouchableOpacity>
 
+            <ScrollView>
+                {
+                    state.assets.map(asset)
+                }
+            </ScrollView>
+
             {/* <TouchableOpacity
                 style={menu_styles.voiceMenu}
             >
@@ -189,7 +184,7 @@ const Menu: FunctionComponent<Props> = ({ refCanvas, imgTest }) => {
 
             <TouchableOpacity
                 style={menu_styles.voiceMenu}
-                onPress={__sendWhatsappMessage}
+                onPress={__share}
             >
                 <Text style={styles.btn}>
                     <Ionicons name="share" size={30} color="white" />
