@@ -15,7 +15,7 @@ import Tutorial from './screens/Tutorial';
 
 type RootStackParamList = {
     Home: undefined,
-    Tutorial: { isFirstTime: boolean },
+    Tutorial: { isFirstTime: boolean } | undefined,
     Menu: undefined
 };
 
