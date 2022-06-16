@@ -33,6 +33,7 @@ const style = `.m-signature-pad {box-shadow: none; border: 1px,solid; }
 body,html {
 width: 100%; height: 100%;}`;
 
+let isSave: boolean = false;
 
 const Flanvas: React.FC<Props> = () => {
 
@@ -43,32 +44,44 @@ const Flanvas: React.FC<Props> = () => {
 
     const __handleSignature = (signature: string) => {
 
-        const path = FileSystem.cacheDirectory + "sign.png";
+        if (isSave) {
+            const path = FileSystem.cacheDirectory + "sign.png";
 
-        FileSystem.writeAsStringAsync(
-            path,
-            signature.replace("data:image/png;base64,", ""),
-            { encoding: FileSystem.EncodingType.Base64 }
-        )
-            .then(() => FileSystem.getInfoAsync(path))
-            .then(res => {
-                if(MediaLibrary.getAlbumAsync('flanvas') !== null){
-                    MediaLibrary.createAssetAsync(res?.uri)
-                    .then( asset => {
-                        MediaLibrary.getAlbumAsync('flanvas').then(album => {
-                            MediaLibrary.addAssetsToAlbumAsync(asset.id, album.id, false)
-                        })
-                    })
-                }
-                MediaLibrary.createAssetAsync(res?.uri)
-                .then( res => {
-                    MediaLibrary.createAlbumAsync('flanvas', res.id, false)
-                    
+            FileSystem.writeAsStringAsync(
+                path,
+                signature.replace("data:image/png;base64,", ""),
+                { encoding: FileSystem.EncodingType.Base64 }
+            )
+                .then(() => FileSystem.getInfoAsync(path))
+                .then(res => {
+                    if (MediaLibrary.getAlbumAsync('flanvas') !== null) {
+                        MediaLibrary.createAssetAsync(res?.uri)
+                            .then(asset => {
+                                setState({ ...state, image: res?.uri })
+
+                                MediaLibrary.getAlbumAsync('flanvas').then(album => {
+                                    MediaLibrary.addAssetsToAlbumAsync(asset.id, album.id, false)
+                                })
+                            })
+                    } else {
+
+                        MediaLibrary.createAssetAsync(res?.uri)
+                            .then(res => {
+                                MediaLibrary.createAlbumAsync('flanvas', res.id, false)
+
+                            })
+                        setState({ ...state, image: res?.uri })
+                    }
+
                 })
+                .catch(console.error);
+        }
+        setState({
+            ...state,
+            image: signature
+        })
 
-                setState({ ...state, image: res?.uri })
-            })
-            .catch(console.error);
+        isSave = false
     };
 
     // const __handleRef = (ref: any) => () => {
@@ -87,10 +100,6 @@ const Flanvas: React.FC<Props> = () => {
         ref.current?.redo();
     }
 
-    // const __handleEmpty = () => {
-    //     console.log("Empty");
-    // };
-
     const __handlePenEraser = () => {
         if (isEraser) {
             ref.current?.draw()
@@ -103,17 +112,9 @@ const Flanvas: React.FC<Props> = () => {
         }
     }
 
-    // const __handleEnd = () => {
-    //     ref.current?.readSignature()
-    // }
-
     const handleMenu_ = () => {
-
-        let img: any = ref.current?.readSignature()
-
         setState({
             ...state,
-            image: img,
             isModal: !state.isModal
         });
     }
@@ -126,6 +127,7 @@ const Flanvas: React.FC<Props> = () => {
     }
 
     const __handleConfirm = () => {
+        isSave = true
         ref.current?.readSignature();
     }
 
