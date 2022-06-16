@@ -2,14 +2,14 @@ import { PixelRatio, StyleSheet } from "react-native";
 
 export const styles = StyleSheet.create({
   imageStyle: {
-    height: PixelRatio.getPixelSizeForLayoutSize(150),
+    height: PixelRatio.getPixelSizeForLayoutSize(155),
     width: '100%',
   },
   wrapper: {
     justifyContent: 'center',
     alignItems: 'center',
     marginVertical: 30,
-    marginHorizontal: 30
+    marginHorizontal: 30,
 },
 header: {
     fontSize: 30,

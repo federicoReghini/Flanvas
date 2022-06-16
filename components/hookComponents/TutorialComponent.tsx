@@ -2,7 +2,7 @@ import React, { FunctionComponent, ReactElement, useState } from 'react';
 
 // native components
 import { Dimensions, Image, SafeAreaView, ScrollView, Text, TouchableOpacity, View } from 'react-native';
-import type { NativeStackScreenProps } from '@react-navigation/native-stack';
+import { useNavigation } from '@react-navigation/native';
 
 // styles
 import { styles } from '../../assets/styles/tutorial_style';
@@ -17,15 +17,11 @@ const initState = {
     currentPage: 0
 }
 
-type RootStackParamList = {
-    Home: undefined;
-};
-
-type Props = NativeStackScreenProps<RootStackParamList>;
-
-const TutorialComponent: FunctionComponent<Props> = ({ navigation }): ReactElement => {
+const TutorialComponent: FunctionComponent = (): ReactElement => {
 
     const [state, setState] = useState<State>(initState);
+
+    const navigate: any = useNavigation();
 
     const setSliderPage = (event: any): void => {
         const { currentPage } = state;
@@ -41,7 +37,7 @@ const TutorialComponent: FunctionComponent<Props> = ({ navigation }): ReactEleme
     }
 
     const handleNavigation = (): void => {
-        navigation.navigate('Home')
+        navigate.navigate('Home')
     }
 
     const { currentPage: pageIndex } = state;
@@ -57,50 +53,101 @@ const TutorialComponent: FunctionComponent<Props> = ({ navigation }): ReactEleme
                     showsHorizontalScrollIndicator={false}
                     onScroll={setSliderPage}
                 >
-                    <View style={{ width, height }}>
-                        {/* <Image source={require('../assets/sos2.jpg')} style={styles.imageStyle} /> */}
+                    <View style={{ width, height: 100 }}>
+                        <Image source={require('../../assets/tutorial1.png')} style={styles.imageStyle} />
                         <View style={styles.wrapper}>
 
                             <Text style={styles.header}>
-                                Add Contact
+                                Flanvas
                             </Text>
 
                             <Text style={styles.paragraph}>
-                                Add contacts to your favorites and let Sos Band guide you
+                                Welcome on Flanvas! An app for your needs
                             </Text>
                         </View>
                     </View>
 
                     <View style={{ width, height }}>
-                        {/* <Image
-                            source={require('../assets/sos3.jpg')}
+                        <Image
+                            source={require('../../assets/tutorial2.png')}
                             style={styles.imageStyle}
-                        /> */}
+                        />
                         <View style={styles.wrapper}>
 
                             <Text style={styles.header}>
-                                Send Message
+                                Undo & Redo
                             </Text>
 
                             <Text style={styles.paragraph}>
-                                Send a message of help with your location at your angels!
+                                You can use the two arrows(undo and redo) for go back and forward
                             </Text>
                         </View>
                     </View>
 
                     <View style={{ width, height }}>
-                        {/* <Image
-                            source={require('../assets/senseiold.png')}
+                        <Image
+                            source={require('../../assets/tutorial3.png')}
                             style={styles.imageStyle}
-                        /> */}
+                        />
                         <View style={styles.wrapper}>
 
                             <Text style={styles.header}>
-                                Relax
+                                Pen & Erase
                             </Text>
 
                             <Text style={styles.paragraph}>
-                                Now you can enjoy your heart attack or whatever till someone comes... if they'll come!
+                                Draw or Erase what ever you want
+                            </Text>
+                        </View>
+                    </View>
+
+                    <View style={{ width, height }}>
+                        <Image
+                            source={require('../../assets/tutorial4.png')}
+                            style={styles.imageStyle}
+                        />
+                        <View style={styles.wrapper}>
+
+                            <Text style={styles.header}>
+                                Camera
+                            </Text>
+
+                            <Text style={styles.paragraph}>
+                                Take a photo(or select one from your gallery) and put it as background
+                            </Text>
+                        </View>
+                    </View>
+
+                    <View style={{ width, height }}>
+                        <Image
+                            source={require('../../assets/tutorial5.png')}
+                            style={styles.imageStyle}
+                        />
+                        <View style={styles.wrapper}>
+
+                            <Text style={styles.header}>
+                                Save
+                            </Text>
+
+                            <Text style={styles.paragraph}>
+                                You can save your Draw whenever you want
+                            </Text>
+                        </View>
+                    </View>
+
+                    <View style={{ width, height }}>
+                        <Image
+                            source={require('../../assets/tutorial6.png')}
+                            style={styles.imageStyle}
+                        />
+                        <View style={styles.wrapper}>
+
+                            <Text style={styles.header}>
+                                Menu
+                            </Text>
+
+                            <Text style={styles.paragraph}>
+                                In the menu you can: change color, resize, clear, see Draws and share
                             </Text>
                         </View>
                     </View>
@@ -108,7 +155,7 @@ const TutorialComponent: FunctionComponent<Props> = ({ navigation }): ReactEleme
                 </ScrollView>
 
                 <View style={styles.paginationWrapper}>
-                    {Array.from(Array(3).keys()).map((key, index) => (
+                    {Array.from(Array(6).keys()).map((key, index) => (
                         <View style={[styles.paginationDots, { opacity: pageIndex === index ? 1 : 0.2 }]} key={index} />
                     ))}
                 </View>

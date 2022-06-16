@@ -1,7 +1,7 @@
 import React, { FunctionComponent, useState, ReactElement } from 'react';
 
 // native components
-import { View, Text, TouchableOpacity, Share, Image } from 'react-native';
+import { View, Text, TouchableOpacity, Image } from 'react-native';
 import * as Sharing from 'expo-sharing';
 import * as MediaLibrary from 'expo-media-library';
 
@@ -15,6 +15,7 @@ import { menu_styles } from '../../assets/styles/menu_styles';
 // type
 import { signatureRef } from '../../utils/ts/types';
 import { ScrollView } from 'react-native-gesture-handler';
+import { useNavigation } from '@react-navigation/native';
 interface Props {
     refCanvas: signatureRef,
     imgTest: string,
@@ -40,6 +41,8 @@ const palette = ['#000000', '#FF4848', '#387CFF', '#3CFF72', '#D560FE', '#FF8A00
 const Menu: FunctionComponent<Props> = ({ refCanvas, imgTest }) => {
 
     const [state, setState] = useState<State>(initState);
+
+    const navigate: any = useNavigation();
 
     const handleCallback = (ref: any, params: any) => () => {
 
@@ -67,6 +70,10 @@ const Menu: FunctionComponent<Props> = ({ refCanvas, imgTest }) => {
             ...state,
             isPalette: !state.isPalette
         })
+    }
+
+    const __handleTutorial = () => {
+        navigate.navigate('Tutorial')
     }
 
     const __handleGallery = async () => {
@@ -106,10 +113,6 @@ const Menu: FunctionComponent<Props> = ({ refCanvas, imgTest }) => {
                 dialogTitle: 'che figata di disegno'
             })
         }
-        // const result = await Share.share({
-        // url: `data:image/jpeg;base64,${imgTest}`,
-        // url: imgTest
-        // });
     }
 
     return (
@@ -149,14 +152,6 @@ const Menu: FunctionComponent<Props> = ({ refCanvas, imgTest }) => {
                     <Ionicons name="clipboard" size={30} color="white" />
                 </Text>
             </TouchableOpacity>
-            {/* 
-            <TouchableOpacity
-                style={menu_styles.voiceMenu}
-            >
-                <Text style={styles.btn}>
-                    <Ionicons name="camera" size={30} color="white" />
-                </Text>
-            </TouchableOpacity> */}
 
             <TouchableOpacity
                 style={menu_styles.voiceMenu}
@@ -173,15 +168,6 @@ const Menu: FunctionComponent<Props> = ({ refCanvas, imgTest }) => {
                 }
             </ScrollView>
 
-            {/* <TouchableOpacity
-                style={menu_styles.voiceMenu}
-            >
-                <Text style={styles.btn}>
-                    Save
-                    <Ionicons name="save" size={30} color="white" />
-                </Text>
-            </TouchableOpacity> */}
-
             <TouchableOpacity
                 style={menu_styles.voiceMenu}
                 onPress={__share}
@@ -193,7 +179,7 @@ const Menu: FunctionComponent<Props> = ({ refCanvas, imgTest }) => {
 
             <TouchableOpacity
                 style={menu_styles.voiceMenu}
-            //onPress={__handleTutorial}
+            onPress={__handleTutorial}
             >
                 <Text style={styles.btn}>
                     Tutorial
