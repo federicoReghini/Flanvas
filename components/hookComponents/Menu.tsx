@@ -98,7 +98,7 @@ const Menu: FunctionComponent<Props> = ({ refCanvas, imgTest }) => {
         )
     }
 
-    const asset = (asset: object, key: number): ReactElement => {
+    const asset = (asset: any, key: number): ReactElement => {
 
         return (
             <Image key={key} source={asset.uri} style={{ width: 150, height: 150, borderWidth: 1 }} />

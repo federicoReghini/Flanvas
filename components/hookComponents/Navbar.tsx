@@ -56,7 +56,7 @@ const Navbar: FunctionComponent<Props> = ({ callbackUndo, callbackRedo, callback
 
     }, [state.count])
 
-    const functionShowAlert = (count) => {
+    const functionShowAlert = (count: number) => {
         switch (count) {
             case 1: {
                 Alert.alert('Now press redo!', '', [{ text: 'ok' }])
